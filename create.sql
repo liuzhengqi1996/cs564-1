@@ -6,17 +6,21 @@ DROP TABLE IF EXISTS Bid;
 
 CREATE TABLE Item(
     ItemID int NOT NULL,
-    Name TEXT NOT NULL,
-    Location TEXT,
-    Country TEXT,
+    Ends time NOT NULL, 
     Currently float NOT NULL,
-    Started time NOT NULL,
-    Ends time NOT NULL,
+    Name TEXT NOT NULL,
+Started time NOT NULL,
+Country TEXT,
+ Number_of_Bids int NOT NULL,
+First_Bid float NOT NULL,
+UserID TEXT NOT NULL,
+    Location TEXT,        
+     Buy_Price TEXT,
     Description TEXT NOT NULL,
-    Number_of_Bids int NOT NULL,
-    First_Bid float NOT NULL,
-    Buy_Price TEXT,
-    UserID TEXT NOT NULL,
+   
+    
+   
+    
     PRIMARY KEY (ItemID),
 	FOREIGN KEY (UserID) REFERENCES Bidder(UserID)
 );
@@ -31,7 +35,7 @@ CREATE TABLE Category(
 CREATE TABLE Seller(
     Rating int NOT NULL,
     UserID TEXT NOT NULL,
-    PRIMARY KEY (UserID)
+PRIMARY KEY(UserID)    
 );
 
 CREATE TABLE Bidder(
@@ -39,7 +43,7 @@ CREATE TABLE Bidder(
     UserID TEXT NOT NULL,
     Location TEXT,
     Country TEXT,
-    PRIMARY KEY (UserID)
+  PRIMARY KEY(UserID)
 );
 
 CREATE TABLE Bid(
