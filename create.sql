@@ -18,19 +18,21 @@ CREATE TABLE Item(
     Buy_Price TEXT,
     Description TEXT NOT NULL,
     PRIMARY KEY (ItemID),
-	FOREIGN KEY (UserID) REFERENCES Bidder(UserID)
+    FOREIGN KEY (UserID) REFERENCES Bidder(UserID)
 );
 
 CREATE TABLE Category(
     ItemID int NOT NULL,
     Category TEXT NOT NULL,
     PRIMARY KEY (ItemID, Category)
-	FOREIGN KEY (ItemID) REFERENCES Item(ItemID)
+    FOREIGN KEY (ItemID) REFERENCES Item(ItemID)
 );
 
 CREATE TABLE Seller(
     Rating int NOT NULL,
     UserID TEXT NOT NULL,
+    Location TEXT,
+    Country TEXT,
     PRIMARY KEY(UserID)    
 );
 
