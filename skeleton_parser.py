@@ -124,7 +124,7 @@ def parseJson(json_file):
         items = loads(f.read())['Items']
         for item in items:
             # Add to Items
-            if item['ItemID'] not in item_entity:
+            if item['ItemID'] not in item_entity['ItemID']:
                 item_entity['ItemID'].append(item['ItemID'])
                 item_entity['Name'].append(checkEmptyStr(item['Name']))
                 # print checkEmptyStr(item['Name'])
@@ -142,24 +142,32 @@ def parseJson(json_file):
                 else:
                     item_entity['Buy_Price'].append('"0"')
                 
-                # Add to Seller
+            # Add to Seller
+            if checkEmptyStr(item['Seller']['UserID']) not in Seller_entity['UserID']:
                 Seller_entity['UserID'].append(checkEmptyStr(item['Seller']['UserID']))
                 Seller_entity['Rating'].append(item['Seller']['Rating'])
-                # Add to category
-                
-                for category in item['Category']:
-                    category_entity['Category'].append(checkEmptyStr(category))
-                    category_entity['ItemID'].append(item['ItemID'])
+            # Add to category
+            for category in item['Category']:
+                category_entity['Category'].append(checkEmptyStr(category))
+                category_entity['ItemID'].append(item['ItemID'])
+
+                # Add to User
+
             
             # Add to Bidder
             if item['Bids']:
                 for bid in item['Bids']:
-                    if 'Country' in bid['Bid']['Bidder']:
-                        Bidder_entity['Country'].append(checkEmptyStr(bid['Bid']['Bidder']['Country']))
-                    if 'Location' in bid['Bid']['Bidder']:
-                        Bidder_entity['Location'].append(checkEmptyStr(bid['Bid']['Bidder']['Location']))
-                    Bidder_entity['Rating'].append(checkEmptyStr(bid['Bid']['Bidder']['Rating']))
-                    Bidder_entity['UserID'].append(checkEmptyStr(bid['Bid']['Bidder']['UserID']))
+                    if checkEmptyStr(bid['Bid']['Bidder']['UserID']) not in Bidder_entity['UserID']:
+                        if 'Country' in bid['Bid']['Bidder']:
+                            Bidder_entity['Country'].append(checkEmptyStr(bid['Bid']['Bidder']['Country']))
+                        else:
+                            Bidder_entity['Country'].append(checkEmptyStr("NULL"))
+                        if 'Location' in bid['Bid']['Bidder']:
+                            Bidder_entity['Location'].append(checkEmptyStr(bid['Bid']['Bidder']['Location']))
+                        else:
+                            Bidder_entity['Location'].append(checkEmptyStr("NULL"))
+                        Bidder_entity['Rating'].append(checkEmptyStr(bid['Bid']['Bidder']['Rating']))
+                        Bidder_entity['UserID'].append(checkEmptyStr(bid['Bid']['Bidder']['UserID']))
                     #Add to Bids
                     Bids_entity['ItemID'].append(item['ItemID'])
                     Bids_entity['Bidder'].append(checkEmptyStr(bid['Bid']['Bidder']['UserID']))
