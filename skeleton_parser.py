@@ -108,6 +108,8 @@ def InitDicts():
     # Init Seller
     Seller_entity.setdefault("UserID",[])
     Seller_entity.setdefault("Rating",[])
+    Seller_entity.setdefault("Country",[])
+    Seller_entity.setdefault("Location",[])
     # Inir Category
     category_entity.setdefault("ItemID",[])
     category_entity.setdefault("Category",[])
@@ -146,6 +148,8 @@ def parseJson(json_file):
             if checkEmptyStr(item['Seller']['UserID']) not in Seller_entity['UserID']:
                 Seller_entity['UserID'].append(checkEmptyStr(item['Seller']['UserID']))
                 Seller_entity['Rating'].append(item['Seller']['Rating'])
+                Seller_entity['Location'].append(checkEmptyStr(item['Location']))
+                Seller_entity['Country'].append(checkEmptyStr(item['Country']))
             # Add to category
             for category in item['Category']:
                 category_entity['Category'].append(checkEmptyStr(category))
@@ -202,8 +206,8 @@ def main(argv):
             bidder_file.write(i+"|"+j+"|"+k+"|"+m+"\n")
     
     with open("seller.dat", "wb") as seller_file:
-        for i, j in zip(*Seller_entity.values()):
-            seller_file.write(i+"|"+j+"\n")
+        for i, j,k,m in zip(*Seller_entity.values()):
+            seller_file.write(i+"|"+j+"|"+k+"|"+m+"\n")
     
     with open("categories.dat", "wb") as categories_file:
         for i, j in zip(*category_entity.values()):
