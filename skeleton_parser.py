@@ -41,7 +41,7 @@ category_entity={}
 def checkEmptyStr(string):
     if string is None or len(string)==0:
         return "NULL"
-    return string
+    return '"'+string.replace('"', '""')+'"'
 
 # Dictionary of months used for date transformation
 MONTHS = {'Jan':'01','Feb':'02','Mar':'03','Apr':'04','May':'05','Jun':'06',\
@@ -112,7 +112,7 @@ def InitDicts():
     category_entity.setdefault("ItemID",[])
     category_entity.setdefault("Category",[])
 
-InitDicts()
+
 
 """
 Parses a single json file. Currently, there's a loop that iterates over each
@@ -127,27 +127,28 @@ def parseJson(json_file):
             if item['ItemID'] not in item_entity:
                 item_entity['ItemID'].append(item['ItemID'])
                 item_entity['Name'].append(checkEmptyStr(item['Name']))
-                item_entity['Location'].append(item['Location'])
+                # print checkEmptyStr(item['Name'])
+                item_entity['Location'].append(checkEmptyStr(item['Location']))
                 item_entity['Seller'].append(item['Seller']['UserID'])
-                item_entity['Country'].append(item['Country'])
-                item_entity['Currently'].append(transformDollar(item['Currently']))
-                item_entity['Started'].append(transformDttm(item['Started']))
-                item_entity['Ends'].append(transformDttm(item['Ends']))
+                item_entity['Country'].append(checkEmptyStr(item['Country']))
+                item_entity['Currently'].append(checkEmptyStr(transformDollar(item['Currently'])))
+                item_entity['Started'].append(checkEmptyStr(transformDttm(item['Started'])))
+                item_entity['Ends'].append(checkEmptyStr(transformDttm(item['Ends'])))
                 item_entity['Description'].append(checkEmptyStr(item['Description']))
                 item_entity['Number_of_Bids'].append(checkEmptyStr(item['Number_of_Bids']))
-                item_entity['First_Bid'].append(transformDollar(item['First_Bid']))
+                item_entity['First_Bid'].append(checkEmptyStr(transformDollar(item['First_Bid'])))
                 if 'Buy_Price' in item:
-                    item_entity['Buy_Price'].append(transformDollar(item['Buy_Price']))
+                    item_entity['Buy_Price'].append(checkEmptyStr(transformDollar(item['Buy_Price'])))
                 else:
-                    item_entity['Buy_Price'].append(0)
+                    item_entity['Buy_Price'].append('"0"')
                 
                 # Add to Seller
-                Seller_entity['UserID'].append(item['Seller']['UserID'])
+                Seller_entity['UserID'].append(checkEmptyStr(item['Seller']['UserID']))
                 Seller_entity['Rating'].append(item['Seller']['Rating'])
                 # Add to category
                 
                 for category in item['Category']:
-                    category_entity['Category'].append(category)
+                    category_entity['Category'].append(checkEmptyStr(category))
                     category_entity['ItemID'].append(item['ItemID'])
             
             # Add to Bidder
@@ -162,8 +163,8 @@ def parseJson(json_file):
                     #Add to Bids
                     Bids_entity['ItemID'].append(item['ItemID'])
                     Bids_entity['Bidder'].append(checkEmptyStr(bid['Bid']['Bidder']['UserID']))
-                    Bids_entity['Amount'].append(checkEmptyStr(bid['Bid']['Amount']))
-                    Bids_entity['Time'].append(transformDttm(bid['Bid']['Time']))
+                    Bids_entity['Amount'].append(checkEmptyStr(transformDollar(bid['Bid']['Amount'])))
+                    Bids_entity['Time'].append(checkEmptyStr(transformDttm(bid['Bid']['Time'])))
 
 """
 Loops through each json files provided on the command line and passes each file
@@ -174,30 +175,31 @@ def main(argv):
         print >> sys.stderr, 'Usage: python skeleton_json_parser.py <path to json files>'
         sys.exit(1)
     # loops over all .json files in the argument
+    InitDicts()
     for f in argv[1:]:
         if isJson(f):
             parseJson(f)
             print "Success parsing " + f
 
     with open("items.dat", "wb") as items_file:
-        writer1 = csv.writer(items_file,delimiter="|")
-        writer1.writerows(zip(*item_entity.values()))
+        for i,j,k,m,a,b,c,d,e,f,g,h in zip(*item_entity.values()):
+            items_file.write(i+"|"+j+"|"+k+"|"+m+"|"+a+"|"+b+"|"+c+"|"+d+"|"+e+"|"+f+"|"+g+"|"+h+"\n")
 
     with open("bids.dat", "wb") as bids_file:
-        writer2 = csv.writer(bids_file,delimiter="|")
-        writer2.writerows(zip(*Bids_entity.values()))
+        for i, j,k,m in zip(*Bids_entity.values()):
+            bids_file.write(i+"|"+j+"|"+k+"|"+m+"\n")
     
     with open("bidder.dat", "wb") as bidder_file:
-        writer3 = csv.writer(bidder_file,delimiter="|")
-        writer3.writerows(zip(*Bidder_entity.values()))
+        for i, j,k,m in zip(*Bidder_entity.values()):
+            bidder_file.write(i+"|"+j+"|"+k+"|"+m+"\n")
     
     with open("seller.dat", "wb") as seller_file:
-        writer4 = csv.writer(seller_file,delimiter="|")
-        writer4.writerows(zip(*Seller_entity.values()))
+        for i, j in zip(*Seller_entity.values()):
+            seller_file.write(i+"|"+j+"\n")
     
     with open("categories.dat", "wb") as categories_file:
-        writer5 = csv.writer(categories_file,delimiter="|")
-        writer5.writerows(zip(*category_entity.values()))
+        for i, j in zip(*category_entity.values()):
+            categories_file.write(i+"|"+j+"\n")
 
     items_file.close()
     bids_file.close()
