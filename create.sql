@@ -29,14 +29,14 @@ CREATE TABLE Category(
 );
 
 CREATE TABLE Seller(
-    UserID TEXT NOT NULL,
     Rating int NOT NULL,
+    UserID TEXT NOT NULL,
     PRIMARY KEY (UserID)
 );
 
 CREATE TABLE Bidder(
-    UserID TEXT NOT NULL,
     Rating int NOT NULL,
+    UserID TEXT NOT NULL,
     Location TEXT,
     Country TEXT,
     PRIMARY KEY (UserID)
@@ -44,8 +44,8 @@ CREATE TABLE Bidder(
 
 CREATE TABLE Bid(
     ItemID int NOT NULL,
-    UserID TEXT NOT NULL,
     Amount float NOT NULL,
+    UserID TEXT NOT NULL,
     Time time NOT NULL,
     FOREIGN KEY (ItemID) REFERENCES item(ItemID),
     FOREIGN KEY (UserID) REFERENCES Bidder(UserID)
