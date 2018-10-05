@@ -8,6 +8,8 @@ update Item set Buy_Price = null where description = "NULL";
 .import categories.dat Category
 
 .import seller.dat Seller
+update Bidder set Location = null where description = "NULL";
+update Bidder set Country = null where description = "NULL";
 
 .import bidder.dat Bidder
 update Bidder set Location = null where description = "NULL";
