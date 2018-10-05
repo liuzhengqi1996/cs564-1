@@ -1,4 +1,4 @@
 SELECT COUNT(*)
 FROM Seller
-Where Rating>1000
+Where Rating > 1000
 GROUP BY Seller.UserID
