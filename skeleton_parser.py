@@ -154,10 +154,7 @@ def parseJson(json_file):
             for category in item['Category']:
                 category_entity['Category'].append(checkEmptyStr(category))
                 category_entity['ItemID'].append(item['ItemID'])
-
-                # Add to User
-
-            
+                
             # Add to Bidder
             if item['Bids']:
                 for bid in item['Bids']:
