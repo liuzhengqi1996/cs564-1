@@ -1,3 +1,7 @@
 SELECT ItemID
-FROM ItemID
-WHERE Currently = MAX(Currently);
+
+
+FROM (
+        SELECT ItemID, MAX(Currently)
+        FROM Item
+);

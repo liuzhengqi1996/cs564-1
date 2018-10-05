@@ -1,3 +1,3 @@
 SELECT COUNT(*)
-FROM Seller S, Bidder B
-WHERE S.UserID = B.UserID;
+FROM Seller, Bidder 
+WHERE Seller.UserID = Bidder.UserID;

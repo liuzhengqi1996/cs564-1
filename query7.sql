@@ -1,6 +1,9 @@
 SELECT COUNT(*)
-FROM Item I, Category C, Bid B
-WHERE I.ItemID = C.ItemID
-AND I.ItemID = B.ItemID
-AND B.Amount > 100
-ORDER BY C.ItemID;
+FROM (
+    SELECT *
+    FROM Bid M, Category N
+    WHERE M.ItemID = N.ItemID
+    AND M.Amount > 100
+    GROUP BY N.Category
+    HAVING COUNT(*) >= 1
+);
